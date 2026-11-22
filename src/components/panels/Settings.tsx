@@ -18,8 +18,6 @@ const STORAGE_INFO: Record<PersistState, { dot: string; label: TKey; hint: TKey 
 // Raggiungibile da Libreria e da Reader.
 export function Settings({ onClose, persist }: { onClose: () => void; persist: PersistState }) {
   const t = useT()
-  const lang = useStore((s) => s.lang)
-  const setLang = useStore((s) => s.setLang)
   const darkMode = useStore((s) => s.darkMode)
   const toggleDark = useStore((s) => s.toggleDark)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -46,19 +44,6 @@ export function Settings({ onClose, persist }: { onClose: () => void; persist: P
   return (
     <Sheet title={t('settings.title')} icon="⚙️" onClose={onClose}>
       <div className="flex flex-col gap-5">
-        {/* Lingua */}
-        <section className="rounded-xl border border-[var(--color-line)] bg-[var(--color-panel)]/60 p-3">
-          <h3 className="mb-3 font-semibold text-[var(--color-gold)]">{t('settings.language')}</h3>
-          <Segmented
-            value={lang}
-            options={[
-              { value: 'it', label: 'Italiano' },
-              { value: 'en', label: 'English' },
-            ]}
-            onChange={(v) => setLang(v)}
-          />
-        </section>
-
         {/* Tema */}
         <section className="rounded-xl border border-[var(--color-line)] bg-[var(--color-panel)]/60 p-3">
           <h3 className="mb-3 font-semibold text-[var(--color-gold)]">{t('settings.theme')}</h3>

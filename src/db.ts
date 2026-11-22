@@ -93,6 +93,9 @@ export interface Playthrough {
   activeCombat: CombatState | null
   warLog: WarLogEntry[]
   notes?: string // note libere dell'utente (pannello Scheda). Campo non indicizzato.
+  // Paragrafo mostrato negli EPUB con più paragrafi per file (vista "un paragrafo
+  // per pagina", vedi utils/sectionView.ts). Campo non indicizzato.
+  currentSection?: string
   updatedAt: number
   // Solo per i salvataggi IMPORTATI senza libro corrispondente in libreria.
   // Il bookId numerico non è portabile tra dispositivi: al reimport ri-agganciamo

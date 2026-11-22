@@ -103,12 +103,15 @@ export function EditableList({
   onChange,
   softMax,
   addPlaceholder,
+  suggestions,
 }: {
   title: string
   items: string[]
   onChange: (items: string[]) => void
   softMax?: number
   addPlaceholder?: string
+  /** Voci da aggiungere con un tocco (es. le armi standard). */
+  suggestions?: string[]
 }) {
   const t = useT()
   const [draft, setDraft] = useState('')
@@ -157,6 +160,23 @@ export function EditableList({
         ))}
         {items.length === 0 && <li className="text-sm text-[var(--color-ink)]/50">{t('common.noItems')}</li>}
       </ul>
+
+      {suggestions && suggestions.length > 0 && (
+        <div className="mt-3">
+          <p className="mb-2 text-xs text-[var(--color-gold-dim)]">{t('common.quickAdd')}</p>
+          <div className="flex flex-wrap gap-2">
+            {suggestions.map((sug) => (
+              <button
+                key={sug}
+                className="touch rounded-full border border-[var(--color-line)] bg-[var(--color-panel-2)] px-3 text-sm active:bg-[var(--color-line)]"
+                onClick={() => onChange([...items, sug])}
+              >
+                + {sug}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mt-2 flex items-center gap-2">
         <input

@@ -23,8 +23,20 @@ fully **offline**.
 > and legally** from [Project Aon](https://www.projectaon.org). Download the
 > EPUB to your device, then load it from the app's library.
 
-- **Languages:** English and Italian (the interface follows your device
-  language and can be switched in Settings).
+- **Language:** this fork (*Kai-Chronik*) has a German-only interface. The
+  i18n structure (`src/i18n/`) is kept, so languages can be added back later.
+- **Section navigation** works with Project Aon EPUBs (one `sectN` file per
+  section) and with EPUBs that keep many numbered sections in one file, such as
+  the German *Einsamer Wolf* edition: sections are found by their number-only
+  headings and `sectN`/`levN` anchors.
+- **One section per page:** in EPUBs with many sections per file only the
+  current section is shown (a section split across two files is joined), and
+  ‹ / › step to the previous/next section number.
+- **Buttons in the text:** enemy stat lines get a "⚔️ Fight" button that opens
+  the combat helper pre-filled; "lose/regain N Endurance" gets a one-tap button;
+  "pick a number" opens the number generator. Nothing is applied without a tap.
+- **Pickers:** Kai Disciplines (and the Weaponskill weapon) are chosen with a tap
+  in the Action Chart; standard weapons can be added with a tap in the Backpack.
 - **Built-in help:** the ❓ *Guide* button in the library explains every
   feature (reader, Action Chart, combat helper, backups…).
 
@@ -92,6 +104,21 @@ two options:
    publish the contents of `dist/`. A `Dockerfile` (nginx, PWA-aware cache
    headers) is also included for self-hosting.
 
+### GitHub Pages (automatic)
+
+The workflow `.github/workflows/deploy-pages.yml` builds the app and publishes
+it on every push to `main` (it can also be started by hand from the Actions
+tab). One-time setup: **Settings → Pages → Source: GitHub Actions**. The app is
+then served at `https://<owner>.github.io/<repo>/`.
+
+Builds for a sub-path set `BASE_PATH` (the workflow does this for you):
+
+```bash
+BASE_PATH=/lone-wolf/ npm run build
+```
+
+Without `BASE_PATH` the app is built for the site root (`/`), as before.
+
 ### Add to Home Screen (install the PWA)
 
 On iPhone, in **Safari**: open the site → **Share** → **Add to Home Screen**.
@@ -137,7 +164,7 @@ src/
   store.ts              # global state (Zustand) + persistence to Dexie
   data/crt.ts           # Combat Results Table (values from Project Aon)
   data/disciplines.ts   # Kai Disciplines
-  i18n/                 # UI dictionaries (English + Italian)
+  i18n/                 # UI dictionary (German)
   components/
     Library.tsx         # library + EPUB loading + copy character between books
     Reader.tsx          # EpubView wrapper, MEMOIZED (stable iframe)

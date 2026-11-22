@@ -57,7 +57,7 @@ export default function App() {
             ? { type: 'navigation', text: translate(lang, 'log.linkSection', { n: section }), section }
             : { type: 'navigation', text: translate(lang, 'log.linkHref', { href }), cfi: href },
         )
-      })
+      }, index)
     },
     [bookId, addWarLog],
   )

@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { Sheet } from '../Sheet'
 import { useStore } from '../../store'
 import { useT } from '../../i18n/useT'
+import { LOCALES } from '../../i18n'
 import type { WarLogEntry } from '../../db'
 import { exportPlaythrough, importPlaythrough } from '../../utils/saveExport'
 import { navigateToSection, goToCfi } from '../../utils/readerControl'
@@ -21,7 +22,7 @@ function fmtTime(ts: number, locale: string): string {
 export function WarLog({ onClose }: { onClose: () => void }) {
   const t = useT()
   const lang = useStore((s) => s.lang)
-  const locale = lang === 'it' ? 'it-IT' : 'en-GB'
+  const locale = LOCALES[lang]
   const playthrough = useStore((s) => s.playthrough)
   const addWarLog = useStore((s) => s.addWarLog)
   const [note, setNote] = useState('')

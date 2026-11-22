@@ -54,7 +54,11 @@ function applyTheme(rendition: Rendition, dark: boolean, fontSize: number) {
 
 function ReaderImpl({ url, initialLocation, darkMode, fontSize, onLocationChange, onReady }: ReaderProps) {
   // Location controllata LOCALMENTE (vedi nota sopra).
-  const [location, setLocation] = useState<string | number | null>(initialLocation)
+  // Senza posizione salvata partiamo dal primo elemento dello spine (0) invece di
+  // lasciar scegliere a react-reader la prima voce del TOC: in alcuni EPUB (es.
+  // l'edizione tedesca di "Einsamer Wolf") quella voce punta a un file fuori dallo
+  // spine e epub.js fallisce con "No Section Found", lasciando il reader vuoto.
+  const [location, setLocation] = useState<string | number | null>(initialLocation ?? 0)
   const renditionRef = useRef<Rendition | null>(null)
 
   const handleLocationChanged = useCallback(

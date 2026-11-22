@@ -1,19 +1,20 @@
-import { en } from './en'
-import { it } from './it'
+import { de } from './de'
 
-// i18n leggero e tipizzato: due dizionari bundlati (niente rete, offline-first),
-// chiavi verificate a compile-time. Interpolazione semplice con {segnaposto}.
+// i18n leggero e tipizzato. L'app è solo in tedesco: un unico dizionario
+// bundlato (niente rete, offline-first), chiavi verificate a compile-time.
+// Interpolazione semplice con {segnaposto}. La struttura resta pronta per
+// aggiungere lingue in futuro (Lang, dictionaries).
 
-export type Lang = 'it' | 'en'
-export type TKey = keyof typeof en
+export type Lang = 'de'
+export type TKey = keyof typeof de
 
-export const LANGS: Lang[] = ['it', 'en']
+export const LANGS: Lang[] = ['de']
 
-export const dictionaries: Record<Lang, Record<TKey, string>> = { en, it }
+export const dictionaries: Record<Lang, Record<TKey, string>> = { de }
 
-/** Traduce una chiave nella lingua data, con fallback a inglese e interpolazione {var}. */
+/** Traduce una chiave con interpolazione {var}. */
 export function translate(lang: Lang, key: TKey, vars?: Record<string, string | number>): string {
-  let s = dictionaries[lang][key] ?? dictionaries.en[key] ?? key
+  let s = dictionaries[lang]?.[key] ?? dictionaries.de[key] ?? key
   if (vars) {
     for (const k of Object.keys(vars)) {
       s = s.replace(new RegExp(`\\{${k}\\}`, 'g'), String(vars[k]))
@@ -22,16 +23,12 @@ export function translate(lang: Lang, key: TKey, vars?: Record<string, string | 
   return s
 }
 
-/** Lingua iniziale: preferenza salvata → lingua del dispositivo → inglese. */
+/** Lingua dell'interfaccia: sempre tedesco. */
 export function detectLang(): Lang {
-  try {
-    const saved = localStorage.getItem('lupo-lang')
-    if (saved === 'it' || saved === 'en') return saved
-  } catch {
-    /* localStorage non disponibile: ignora */
-  }
-  const nav = (navigator.language || '').toLowerCase()
-  return nav.startsWith('it') ? 'it' : 'en'
+  return 'de'
 }
 
 export type TFunc = (key: TKey, vars?: Record<string, string | number>) => string
+
+/** Locale BCP 47 per formattare date/ore nella lingua dell'interfaccia. */
+export const LOCALES: Record<Lang, string> = { de: 'de-DE' }

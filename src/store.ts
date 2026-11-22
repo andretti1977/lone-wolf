@@ -33,7 +33,10 @@ interface AppState {
   darkMode: boolean
   fontSize: number // percentuale per il reader
   lightboxSrc: string | null // immagine aperta a tutto schermo (object URL)
-  lang: Lang // lingua UI (persistita in localStorage)
+  lang: Lang // lingua UI (solo tedesco)
+  // Dati del nemico letti dal testo ("⚔️ Combatti"): precompilano il pannello
+  // Nuovo combattimento, restano modificabili e vengono azzerati all'avvio.
+  combatPrefill: { name: string; cs: number; en: number } | null
 
   // navigazione app
   openReader: (bookId: number, playthroughId: number) => Promise<void>
@@ -41,7 +44,6 @@ interface AppState {
   setPanel: (p: PanelId) => void
   toggleDark: () => void
   setFontSize: (f: number) => void
-  setLang: (l: Lang) => void
   openLightbox: (src: string) => void
   closeLightbox: () => void
 
@@ -118,6 +120,7 @@ export const useStore = create<AppState>((set, get) => ({
   fontSize: loadFont(),
   lightboxSrc: null,
   lang: detectLang(),
+  combatPrefill: null,
 
   openReader: async (bookId, playthroughId) => {
     const pt = await db.playthroughs.get(playthroughId)
@@ -142,14 +145,6 @@ export const useStore = create<AppState>((set, get) => ({
     set({ fontSize })
   },
 
-  setLang: (l) => {
-    try {
-      localStorage.setItem('lupo-lang', l)
-    } catch {
-      /* localStorage non disponibile: la lingua resta comunque in memoria */
-    }
-    set({ lang: l })
-  },
 
   openLightbox: (src) =>
     set((s) => {

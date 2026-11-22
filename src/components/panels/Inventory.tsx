@@ -3,6 +3,7 @@ import { EditableList, Stepper } from '../ui'
 import { useStore } from '../../store'
 import { useT } from '../../i18n/useT'
 import type { ActionChart as Chart } from '../../db'
+import { WEAPONS } from '../../data/disciplines'
 
 // Inventario: armi / zaino / oggetti speciali / pasti. Liste liberamente editabili.
 // Limiti classici mostrati come riferimento, mai bloccanti.
@@ -10,6 +11,7 @@ export function Inventory({ onClose }: { onClose: () => void }) {
   const t = useT()
   const chart = useStore((s) => s.playthrough?.actionChart)
   const setChart = useStore((s) => s.setActionChart)
+  const lang = useStore((s) => s.lang)
   if (!chart) return null
 
   const patch = (p: Partial<Chart>) => setChart({ ...chart, ...p })
@@ -34,6 +36,7 @@ export function Inventory({ onClose }: { onClose: () => void }) {
           onChange={(weapons) => patch({ weapons })}
           softMax={2}
           addPlaceholder={t('inv.weaponsPlaceholder')}
+          suggestions={WEAPONS.map((w) => w.names[lang])}
         />
         <EditableList
           title={t('inv.backpack')}

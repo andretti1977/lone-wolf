@@ -68,10 +68,11 @@ function StartCombat({ onClose }: { onClose: () => void }) {
   const setCombat = useStore((s) => s.setCombat)
   const addWarLog = useStore((s) => s.addWarLog)
 
+  const prefill = useStore((s) => s.combatPrefill)
   const [importFromChart, setImportFromChart] = useState(true)
-  const [enemyName, setEnemyName] = useState('')
-  const [enemyCS, setEnemyCS] = useState(0)
-  const [enemyEN, setEnemyEN] = useState(0)
+  const [enemyName, setEnemyName] = useState(prefill?.name ?? '')
+  const [enemyCS, setEnemyCS] = useState(prefill?.cs ?? 0)
+  const [enemyEN, setEnemyEN] = useState(prefill?.en ?? 0)
   const [lwCS, setLwCS] = useState(chart?.combatSkill ?? 0)
   const [lwEN, setLwEN] = useState(chart?.endurance.current ?? 0)
 
@@ -86,6 +87,7 @@ function StartCombat({ onClose }: { onClose: () => void }) {
       lwEndurance: importFromChart && chart ? chart.endurance.current : lwEN,
     }
     setCombat(state)
+    useStore.setState({ combatPrefill: null })
     addWarLog({ type: 'combat', text: t('combat.logStart', { name: state.enemyName }) })
   }
 
